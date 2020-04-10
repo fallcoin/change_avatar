@@ -3,16 +3,26 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "GCU生日快乐-校庆头像制作",
+				"navigationBarBackgroundColor": "#a2d4fc",
+				"navigationBarTextStyle": "white"
 			}
 		}
 	    ,{
             "path" : "pages/select/select",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "GCU生日快乐-校庆头像制作",
+				"navigationBarBackgroundColor": "#a2d4fc",
+				"navigationBarTextStyle": "white"
+			}
         }
         ,{
             "path" : "pages/upload/upload",
-            "style" : {}
+            "style" : {
+				"navigationBarTitleText": "剪辑",
+				"navigationBarBackgroundColor": "#a2d4fc",
+				"navigationBarTextStyle": "white"
+			}
         }
     ],
 	"globalStyle": {

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="">
+		<view class="cropper-wrapper">
 			<canvas
 				class="cropper"
 				disable-scroll="true"
@@ -10,8 +10,6 @@
 				:style="{width: cropperOption.width + 'px',height: cropperOption.height + 'px', backgroundColor: 'rgba(0, 0, 0, 0.8)'}"
 				:canvas-id="cropperOption.id">
 			</canvas>
-		</view>
-		<view class="cropper-wrapper">
 			<view class="cropper-buttons">
 				<view class="upload" @click="uploadTap">重新选择</view>
 				<view class="getCropperImage" @click="getCropperImage">确定</view>
@@ -22,24 +20,29 @@
 
 <script>
 	import weCropper from '../../helper/cropper.js'
+	const device = uni.getSystemInfoSync()
+	const width = device.windowWidth
+	const height = device.windowHeight -50
 	
 	export default {
 		data() {
 			return {
-				device: null,
 				cropperOption: {
 					id: 'cropper',
-					width: 0,
-					height: 0,
+					width,
+					height,
 					scale: 2.5,
 					zoom: 8,
 					cut: {
-						x: (this.width - 300) / 2,
-						y: (this.height - 300) / 2,
+						x: (width - 300) / 2,
+						y: (height - 300) / 2,
 						width: 300,
 						height: 300
 					}
-				}
+				},
+				wecropper: null,
+				name: '',
+				i: 0
 			}
 		},
 		methods: {
@@ -47,7 +50,7 @@
 				this.wecropper.getCropperImage((avatar) => {
 					if (avatar) {
 						uni.redirectTo({
-							url: `../select/select?avatar=${avatar}`
+							url: `../select/select?avatar=${avatar}&i=${this.i}`
 						})
 					} else {
 						console.log('获取图片失败')
@@ -55,30 +58,28 @@
 				})
 			},
 			uploadTap: function() {
-				console.log(this.wecropper)
 				uni.chooseImage({
 					count: 1,
+					sizeType: ['original', 'compressed'],
+					sourceType: ['album', 'camera'],
 					success: (res) => {
 						this.wecropper.pushOrign(res.tempFilePaths[0])
 					}
 				})
 			},
 			touchStart: function(e) {
-				console.log(e)
 				this.wecropper.touchStart(e)
 			},
 			touchMove: function(e) {
-				this.wecropper.touchStart(e)
+				this.wecropper.touchMove(e)
 			},
 			touchEnd: function(e) {
-				console.log(e)
-				this.wecropper.touchStart(e)
+				this.wecropper.touchEnd(e)
 			}
 		},
 		onLoad: function(option) {
-			this.device = uni.getSystemInfoSync()
-			this.cropperOption.width = this.device.windowWidth
-			this.cropperOption.height = this.device.windowHeight - 50
+			this.name = option.name
+			this.i = option.i
 			const {cropperOption} = this
 			const {src} = option
 			if(src) {
@@ -132,6 +133,7 @@
     text-align: center;
 }
 .cropper{
+	position: absolute;
     top: 0;
     left: 0;
 }
